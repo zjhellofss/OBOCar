@@ -65,6 +65,7 @@ public class PassengerActivity extends AppCompatActivity {
     private LatLonPoint startPoint;
     private LatLonPoint endPoint;
     private DrivingRouteOverlay drivingRouteOverlay = null;
+    private LatLonPoint driverPoint;
 
     protected void initUI() {
         _mapView = (MapView) findViewById(R.id.PassengerMap);
@@ -283,11 +284,10 @@ public class PassengerActivity extends AppCompatActivity {
                         _bt_startOrder.setText("等待接驾...");
                         _amap.clear();//清除地图的覆盖物
                         drivingRouteOverlay.removeFromMap();//清除路线规划图
-                        //将自身位置添加到地图中
-                        addMarkerToMap(startPoint.getLatitude(), startPoint.getLongitude(), R.drawable.location_marker);
                         //司机所在的位置
-                        LatLonPoint driverPoint = GetDriverLocationService.getDriverLocation();
-
+                        driverPoint = GetDriverLocationService.getDriverLocation();
+                        //绘制当前乘客与司机之间的路径
+                        drawRouteLine(startPoint, driverPoint);
                     }
                 }
             }
