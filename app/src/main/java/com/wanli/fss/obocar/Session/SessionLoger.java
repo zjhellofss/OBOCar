@@ -1,4 +1,4 @@
-package com.wanli.fss.obocar.Pojo;
+package com.wanli.fss.obocar.Session;
 
 public class SessionLoger {
     private static String sessionId;

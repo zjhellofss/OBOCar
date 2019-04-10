@@ -2,6 +2,8 @@ package com.wanli.fss.obocar.Service;
 
 import android.util.Log;
 
+import com.wanli.fss.obocar.Service.ServiceUtils.LoginHttpUtils;
+
 public class LoginService {
     public static boolean UserIsValid(String username, String pswd, String isDriver) {
         boolean res = false;

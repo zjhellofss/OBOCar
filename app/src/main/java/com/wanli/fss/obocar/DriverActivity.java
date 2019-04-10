@@ -20,6 +20,7 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.wanli.fss.obocar.Service.UpdateAddressService;
 
 public class DriverActivity extends AppCompatActivity {
 
@@ -42,11 +43,24 @@ public class DriverActivity extends AppCompatActivity {
     boolean isAddSelfMarker = false;
     int flag = 0;
     int traffic_flag = 0;
-
+    private Button startOrder = null;
 
     protected void initUI() {
         //将地图容器跟MapView控件相关联
         _mapView = (MapView) findViewById(R.id.DriverMap);
+        startOrder = findViewById(R.id.bt_driver);
+        startOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //开始接单的点击事件
+                String buttonText = startOrder.getText().toString();
+                if (buttonText.equals("开始接单")) {
+                    buttonText.equals("接单中...");
+                    //并且修改司机对应的状态
+                }
+
+            }
+        });
 
     }
 
@@ -120,6 +134,10 @@ public class DriverActivity extends AppCompatActivity {
                         Log.e("Amap", "city = " + aMapLocation.getCity());
                         Log.e("Amap", "longtitude = " + aMapLocation.getLongitude());
                         Log.e("Amap", "latitude = " + aMapLocation.getLatitude());
+
+                        //更新司机的当前位置
+                        UpdateAddressService.updateAddress(String.valueOf(aMapLocation.getLatitude())
+                                , String.valueOf(aMapLocation.getLongitude()));
 
                         if (isAddSelfMarker == false) {
                             //在此位置添加一个标记

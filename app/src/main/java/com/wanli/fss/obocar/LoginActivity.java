@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wanli.fss.obocar.Service.LoginService;
+import com.wanli.fss.obocar.Service.UpdateAddressService;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -87,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                         //2 给这个动作设置起始界面 和 目的界面
                         intent.setClass(LoginActivity.this, DriverActivity.class);
                     } else {
+                        //更新坐标
                         //需要跳转 乘客界面
                         //2 给这个动作设置起始界面 和 目的界面
                         intent.setClass(LoginActivity.this, PassengerActivity.class);
