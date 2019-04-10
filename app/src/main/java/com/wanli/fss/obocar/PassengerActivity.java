@@ -111,7 +111,7 @@ public class PassengerActivity extends AppCompatActivity {
         //1.5 给定位客户端设置一些属性
         _amapLocationOption = new AMapLocationClientOption();
         //每5s定位一次
-        _amapLocationOption.setInterval(5000);
+        _amapLocationOption.setInterval(1000);
         //_amapLocationOption.setOnceLocation(true);
 
         //将option设置给client对象
@@ -148,10 +148,8 @@ public class PassengerActivity extends AppCompatActivity {
 
                         //设置乘客源地址信息
                         _tv_srcAddr.setText(aMapLocation.getAddress());
-                        if (startPoint == null) {
-                            //得到乘客的其实坐标
-                            startPoint = new LatLonPoint(aMapLocation.getLatitude(), aMapLocation.getLongitude());
-                        }
+                        //得到乘客的起始坐标
+                        startPoint = new LatLonPoint(aMapLocation.getLatitude(), aMapLocation.getLongitude());
 
                     } else {
                         //定位失败，

@@ -20,6 +20,7 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.wanli.fss.obocar.Service.DriverStateService;
 import com.wanli.fss.obocar.Service.GetOrderService;
 import com.wanli.fss.obocar.Service.ServiceUtils.GetOrderHttpUtils;
 import com.wanli.fss.obocar.Service.UpdateAddressService;
@@ -60,7 +61,11 @@ public class DriverActivity extends AppCompatActivity {
                     startOrder.setText("接单中...");
                     //并且修改司机对应的状态
                     GetOrderService.GetOrder();
+                    //开始查询自己的状态 如果状态为catching则按钮改变为正在接乘客
+                    DriverStateService.waitForState();
+                    startOrder.setText("前往接驾");
                 }
+
 
             }
         });
