@@ -20,6 +20,8 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.wanli.fss.obocar.Service.GetOrderService;
+import com.wanli.fss.obocar.Service.ServiceUtils.GetOrderHttpUtils;
 import com.wanli.fss.obocar.Service.UpdateAddressService;
 
 public class DriverActivity extends AppCompatActivity {
@@ -55,8 +57,9 @@ public class DriverActivity extends AppCompatActivity {
                 //开始接单的点击事件
                 String buttonText = startOrder.getText().toString();
                 if (buttonText.equals("开始接单")) {
-                    buttonText.equals("接单中...");
+                    startOrder.setText("接单中...");
                     //并且修改司机对应的状态
+                    GetOrderService.GetOrder();
                 }
 
             }

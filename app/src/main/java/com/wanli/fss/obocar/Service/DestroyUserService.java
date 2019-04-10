@@ -1,5 +1,7 @@
 package com.wanli.fss.obocar.Service;
 
+import android.util.Log;
+
 import com.wanli.fss.obocar.Service.ServiceUtils.DestroyUserHttpUtils;
 
 public class DestroyUserService {
@@ -7,7 +9,7 @@ public class DestroyUserService {
         try {
             DestroyUserHttpUtils.destroyUserFromServer(sessionId);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e("DestroyService", "用户退出失败");
         }
     }
 }

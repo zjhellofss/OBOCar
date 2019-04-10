@@ -39,6 +39,9 @@ import com.amap.api.services.route.RideRouteResult;
 import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.wanli.fss.obocar.Service.DestroyUserService;
+import com.wanli.fss.obocar.Service.GetDriverLocationService;
+import com.wanli.fss.obocar.Service.GetOrderService;
+import com.wanli.fss.obocar.Service.TakeCarService;
 import com.wanli.fss.obocar.Service.UpdateAddressService;
 import com.wanli.fss.obocar.Session.SessionLoger;
 
@@ -61,6 +64,7 @@ public class PassengerActivity extends AppCompatActivity {
     private String city;
     private LatLonPoint startPoint;
     private LatLonPoint endPoint;
+    private DrivingRouteOverlay drivingRouteOverlay = null;
 
     protected void initUI() {
         _mapView = (MapView) findViewById(R.id.PassengerMap);
@@ -164,11 +168,13 @@ public class PassengerActivity extends AppCompatActivity {
 
     //绘制驾驶交通路径
 
-    protected void drawRouteLine() {
+    protected void drawRouteLine(LatLonPoint startPoint, LatLonPoint endPoint) {
+        final LatLonPoint startPointFinal = startPoint;
+        final LatLonPoint endPointFinal = endPoint;
         //创建路径的绘制句柄
         RouteSearch routeSearch = new RouteSearch(getApplicationContext());
         //获取起点和终点
-        RouteSearch.FromAndTo ft = new RouteSearch.FromAndTo(startPoint, endPoint);
+        RouteSearch.FromAndTo ft = new RouteSearch.FromAndTo(startPointFinal, endPointFinal);
         //设置一个路径搜索的query
         RouteSearch.DriveRouteQuery query = new RouteSearch.DriveRouteQuery(ft,
                 RouteSearch.DrivingDefault, null, null, "");
@@ -190,8 +196,8 @@ public class PassengerActivity extends AppCompatActivity {
                     //得到路径
                     //todo 以第一种方案为准
                     DrivePath path = driveRouteResult.getPaths().get(0);
-                    DrivingRouteOverlay drivingRouteOverlay = new DrivingRouteOverlay(
-                            getApplicationContext(), _amap, path, startPoint, endPoint);
+                    drivingRouteOverlay = new DrivingRouteOverlay(
+                            getApplicationContext(), _amap, path, startPointFinal, endPointFinal);
                     //去掉中间的小车
                     drivingRouteOverlay.setNodeIconVisibility(false);
                     drivingRouteOverlay.zoomToSpan();
@@ -251,7 +257,7 @@ public class PassengerActivity extends AppCompatActivity {
                                 //将之前的路径清空
                                 _amap.clear();
                                 //画路线地址
-                                drawRouteLine();
+                                drawRouteLine(startPoint, endPoint);
                             }
                         }
 
@@ -262,6 +268,27 @@ public class PassengerActivity extends AppCompatActivity {
                     });
                     poiSearch.searchPOIAsyn();
                     _bt_startOrder.setText("确定打车");
+                } else if (_bt_startOrder.getText().equals("确认打车") || _bt_startOrder.getText().equals("约车中...")) {
+                    //更新服务器中User对象的状态
+                    _bt_startOrder.setText("约车中...");
+                    String driverSid = TakeCarService.getDriverSid();
+                    if (driverSid.equals("FAILED")) {
+                        Toast.makeText(getApplicationContext(), "服务器正忙或附近没有司机，请稍后再试", Toast.LENGTH_LONG).show();
+                        //todo 应该设置回退的环节，但是我时间来不及了
+                    } else {
+                        Log.e("Amap", "司机的sessionId为 " + driverSid);
+                        SessionLoger.setPeerId(driverSid);
+                        //todo 必须完成的功能,绘制司机的位置和路径图
+                        Toast.makeText(getApplicationContext(), "司机正在赶来，请在原地等待", Toast.LENGTH_LONG).show();
+                        _bt_startOrder.setText("等待接驾...");
+                        _amap.clear();//清除地图的覆盖物
+                        drivingRouteOverlay.removeFromMap();//清除路线规划图
+                        //将自身位置添加到地图中
+                        addMarkerToMap(startPoint.getLatitude(), startPoint.getLongitude(), R.drawable.location_marker);
+                        //司机所在的位置
+                        LatLonPoint driverPoint = GetDriverLocationService.getDriverLocation();
+
+                    }
                 }
             }
         });

@@ -12,23 +12,22 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class GetOrderHttpUtils {
-    //
-    public static void GetOrderFromServer(String sessionId) throws InterruptedException {
+public class GetDriverLocationHttpUtils {
+    private static String res = "";
+
+    public static String GetDriverLocationFromServer(String driverId) throws InterruptedException {
+
         final FormBody formBody = new FormBody
                 .Builder()
-                .add("sid", sessionId)
+                .add("sid", driverId)
                 .build();
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-
-
                 OkHttpClient client = new OkHttpClient();
                 //构建FormBody，传入要提交的参数
-
                 final Request request = new Request.Builder()
-                        .url("http://192.168.43.109:8080/mywb/getOrder")
+                        .url("http://192.168.43.109:8080/mywb/getDriver")
                         .post(formBody)
                         .build();
                 Call requestCal = client.newCall(request);
@@ -39,13 +38,8 @@ public class GetOrderHttpUtils {
                     throw new RuntimeException(e.toString());
                 }
                 try {
-                    String res = response.body().string();
-                    if (res.startsWith("success")) {
-                        String sessionId = res.substring(8, res.length());
-                        //记录用户当前的sessionId
-                        SessionLoger.setSessionId(sessionId);
-                    }
-                    Log.e("GetOrderHttpUtils", res);
+                    res = response.body().string();
+                    Log.e("GetDriverHttpUtils", res);
                 } catch (IOException e) {
                     throw new RuntimeException(e.toString());
                 }
@@ -53,7 +47,6 @@ public class GetOrderHttpUtils {
         });
         t.start();
         t.join(5000);
+        return res;
     }
 }
-
-

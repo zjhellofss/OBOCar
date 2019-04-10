@@ -1,5 +1,7 @@
 package com.wanli.fss.obocar.Service;
 
+import android.util.Log;
+
 import com.wanli.fss.obocar.Service.ServiceUtils.UpdateServiceHttpUtils;
 import com.wanli.fss.obocar.Session.SessionLoger;
 
@@ -9,7 +11,7 @@ public class UpdateAddressService {
         try {
             UpdateServiceHttpUtils.updateAddressToServer(sessionId, latitude, longitude);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e("UpdateService","用户更新位置失败");
         }
     }
 }
