@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wanli.fss.obocar.Service.LoginService;
+
 public class LoginActivity extends AppCompatActivity {
 
     //定义对象
@@ -39,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
 
-        Log.e(Tag,"onCreate()...");
+        Log.e(Tag, "onCreate()...");
 
 
         //关联控件
@@ -52,54 +54,48 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                boolean login_res = true;
-
                 //获取用户名和密码
                 String username = attv_username.getText().toString();
                 String passwd = et_passwd.getText().toString();
 
 
-                if (username.isEmpty() == true) {
+                if (username.isEmpty()) {
                     //日志
                     Log.e(Tag, "用户名为空");
 
                     //吐司
                     Toast.makeText(getApplicationContext(), "用户名为空", Toast.LENGTH_SHORT).show();
                     return;
-                }
-                else if (passwd.isEmpty() == true) {
+                } else if (passwd.isEmpty()) {
                     Log.e(Tag, "密码为空");
                     Toast.makeText(getApplicationContext(), "密码为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-
-                if (login_res == true) {
+                String isDriverString = isDriver ? "true" : "false";
+                boolean loginRes = LoginService.UserIsValid(username, passwd, isDriverString);
+                if (loginRes) {
                     //登陆成功
-                    Log.e(Tag, "登陆成功 username = "+ username +", passwd = "+ passwd);
-                    Log.e(Tag, "当前用户的角色是 "+ ((isDriver==true)?"司机":"乘客"));
-
+                    Log.e(Tag, "登录成功 username = " + username + ", passwd = " + passwd);
+                    Log.e(Tag, "当前用户的角色是 " + ((isDriver) ? "司机" : "乘客"));
+                    Toast.makeText(getApplicationContext(), "登录成功", Toast.LENGTH_SHORT).show();
 
                     //1 定义一个跳转的对象
                     Intent intent = new Intent();
 
-                    if(isDriver == true) {
+                    if (isDriver) {
                         //需要跳转到司机界面
                         //2 给这个动作设置起始界面 和 目的界面
                         intent.setClass(LoginActivity.this, DriverActivity.class);
-                    }
-                    else  {
+                    } else {
                         //需要跳转 乘客界面
                         //2 给这个动作设置起始界面 和 目的界面
                         intent.setClass(LoginActivity.this, PassengerActivity.class);
                     }
                     //3 启动跳转
                     startActivity(intent);
-                }
-                else {
+                } else {
                     //登陆失败
-                    Log.e(Tag, "登陆失败！！ username = "+ username +", passwd = "+ passwd);
-                    Log.e(Tag, "当前用户的角色是 "+ ((isDriver==true)?"司机":"乘客"));
+                    Toast.makeText(getApplicationContext(), "用户名或密码错误", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -111,10 +107,9 @@ public class LoginActivity extends AppCompatActivity {
         cb_isDriver.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true) {
+                if (isChecked) {
                     isDriver = true;
-                }
-                else {
+                } else {
                     isDriver = false;
                 }
             }
@@ -141,50 +136,50 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        Log.e(Tag,"onStart()...");
+        Log.e(Tag, "onStart()...");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        Log.e(Tag,"onResume()...");
+        Log.e(Tag, "onResume()...");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.e(Tag,"onRestart()...");
+        Log.e(Tag, "onRestart()...");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e(Tag,"onStop()...");
+        Log.e(Tag, "onStop()...");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e(Tag,"onPause()...");
+        Log.e(Tag, "onPause()...");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e(Tag,"onDestroy()...");
+        Log.e(Tag, "onDestroy()...");
     }
 
     public void initUI() {
-        tv_username1 = (TextView)findViewById(R.id.tv_username1);
-        tv_passwd = (TextView)findViewById(R.id.tv_passwd);
+        tv_username1 = (TextView) findViewById(R.id.tv_username1);
+        tv_passwd = (TextView) findViewById(R.id.tv_passwd);
         //et_username = (EditText)findViewById(R.id.et_username);
-        et_passwd = (EditText)findViewById(R.id.et_passwd);
-        cb_isDriver = (CheckBox)findViewById(R.id.cb_isDriver);
-        bt_login = (Button)findViewById(R.id.bt_login);
-        bt_reg = (Button)findViewById(R.id.bt_reg);
+        et_passwd = (EditText) findViewById(R.id.et_passwd);
+        cb_isDriver = (CheckBox) findViewById(R.id.cb_isDriver);
+        bt_login = (Button) findViewById(R.id.bt_login);
+        bt_reg = (Button) findViewById(R.id.bt_reg);
 
-        attv_username = (AutoCompleteTextView)findViewById(R.id.attv_username);
+        attv_username = (AutoCompleteTextView) findViewById(R.id.attv_username);
     }
 
 }

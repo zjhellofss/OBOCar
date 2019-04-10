@@ -1,9 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PassengerActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:text="等待服务器定位地址..."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_passenger_srcAddr"
+        android:textSize="18sp" />
+
+
+    <AutoCompleteTextView
+        android:id="@+id/attv_passenger_dstAddr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_passenger_srcAddr"
+        android:hint="请输入目标地址"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="12dp" />
+
+    <com.amap.api.maps.MapView
+
+        android:id="@+id/PassengerMap"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="441dp"
+
+        android:layout_below="@+id/attv_passenger_dstAddr"
+        tools:layout_editor_absoluteX="-29dp"
+        tools:layout_editor_absoluteY="58dp">
+
+
+    </com.amap.api.maps.MapView>
+
+    <Button
+        android:id="@+id/bt_startOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="开始约车"
+        tools:layout_editor_absoluteX="297dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+
+</RelativeLayout>
