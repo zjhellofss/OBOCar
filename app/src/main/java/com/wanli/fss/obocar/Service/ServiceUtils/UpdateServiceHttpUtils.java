@@ -2,8 +2,6 @@ package com.wanli.fss.obocar.Service.ServiceUtils;
 
 import android.util.Log;
 
-import com.wanli.fss.obocar.Session.SessionLoger;
-
 import java.io.IOException;
 
 import okhttp3.Call;

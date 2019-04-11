@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    useLibrary  'org.apache.http.legacy'
+    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.wanli.fss.obocar"
         minSdkVersion 15
@@ -35,4 +35,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation files('libs/AMap3DMap_4.1.2_AMapNavi_1.9.3_AMapSearch_3.6.0_AMapLocation_3.1.0_20161114.jar')
     implementation "com.squareup.okhttp3:okhttp:3.10.0"
+    implementation 'com.google.code.gson:gson:2.6.2'
 }

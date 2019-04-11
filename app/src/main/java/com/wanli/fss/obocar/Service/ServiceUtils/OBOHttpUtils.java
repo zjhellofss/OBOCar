@@ -12,6 +12,56 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+class PersonForJson {
+    private String status;
+    private int age;
+    private String gender;
+    private String emotion;
+
+    public PersonForJson(String status, int age, String gender, String emotion) {
+        this.status = status;
+        this.age = age;
+        this.gender = gender;
+        this.emotion = emotion;
+
+    }
+
+    public PersonForJson() {
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getEmotion() {
+        return emotion;
+    }
+
+    public void setEmotion(String emotion) {
+        this.emotion = emotion;
+    }
+}
+
 /**
  * 作为所有访问网络方法的父类
  *
