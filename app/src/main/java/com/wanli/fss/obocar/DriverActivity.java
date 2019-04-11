@@ -1,11 +1,15 @@
 package com.wanli.fss.obocar;
 
+import android.annotation.SuppressLint;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -20,12 +24,46 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.wanli.fss.obocar.Service.DriverStateService;
 import com.wanli.fss.obocar.Service.GetOrderService;
+import com.wanli.fss.obocar.Service.GetStateService;
 import com.wanli.fss.obocar.Service.ServiceUtils.GetOrderHttpUtils;
 import com.wanli.fss.obocar.Service.UpdateAddressService;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class DriverActivity extends AppCompatActivity {
+    Timer timer = new Timer();
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    Toast.makeText(getApplicationContext(), "正在等单...",
+                            Toast.LENGTH_SHORT).show();
+                    String res = GetStateService.getStateService();
+                    Log.e("Amap", "res: " + res);
+                    if (res.equals("CATCHING")) {
+                        Toast.makeText(getApplicationContext(), "已经为您接到新的订单前往接驾",
+                                Toast.LENGTH_LONG).show();
+                        startOrder.setText("已接到乘客上车");
+                        timer.cancel();
+                        task.cancel();
+                    }
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
+    private TimerTask task = new TimerTask() {
+        public void run() {
+            Message message = new Message();
+            message.what = 1;
+            handler.sendMessage(message);
+        }
+
+    };
 
     //创建一个地图容器MapView对象
     private MapView _mapView = null;
@@ -59,11 +97,15 @@ public class DriverActivity extends AppCompatActivity {
                 String buttonText = startOrder.getText().toString();
                 if (buttonText.equals("开始接单")) {
                     startOrder.setText("接单中...");
-                    //并且修改司机对应的状态
                     GetOrderService.GetOrder();
-                    //开始查询自己的状态 如果状态为catching则按钮改变为正在接乘客
-                    DriverStateService.waitForState();
-                    startOrder.setText("前往接驾");
+                    timer.schedule(task, 0, 1000);
+//                    task.cancel();
+//                    timer.cancel();
+//                    //并且修改司机对应的状态
+//                    //开始查询自己的状态 如果状态为catching则按钮改变为正在接乘客
+//                    DriverStateService.waitForState();
+//                    Toast.makeText(getApplicationContext(), "已接单，前往接驾", Toast.LENGTH_LONG).show();
+//                    startOrder.setText("前往接驾");
                 }
 
 

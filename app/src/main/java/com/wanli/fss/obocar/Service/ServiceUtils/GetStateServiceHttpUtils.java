@@ -2,8 +2,6 @@ package com.wanli.fss.obocar.Service.ServiceUtils;
 
 import android.util.Log;
 
-import com.wanli.fss.obocar.Session.SessionLoger;
-
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -12,10 +10,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class DriverStateHttpUtils {
+public class GetStateServiceHttpUtils {
     public static String res = "";
 
-    public static void waitStateFromServer(String sessionId) throws InterruptedException {
+    public static String getStateServiceFromServer(String sessionId) throws InterruptedException {
         final FormBody formBody = new FormBody
                 .Builder()
                 .add("sid", sessionId)
@@ -23,6 +21,7 @@ public class DriverStateHttpUtils {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
+
                 OkHttpClient client = new OkHttpClient();
                 //构建FormBody，传入要提交的参数
 
@@ -34,25 +33,16 @@ public class DriverStateHttpUtils {
                 Response response = null;
                 try {
                     response = requestCal.execute();
-                } catch (IOException e) {
-                    throw new RuntimeException(e.toString());
-                }
-                try {
+                    //获取响应
                     res = response.body().string();
-
-                    Log.e("GetOrderHttpUtils", res);
+                    Log.e("res",res);
                 } catch (IOException e) {
                     throw new RuntimeException(e.toString());
                 }
             }
         });
-        for (int i = 0; i < 1000; ++i) {
-            t.start();
-            t.join(2000);
-            if (res.equals("CATCHING")) {
-                return;
-            }
-        }
-
+        t.start();
+        t.join(5000);
+        return res;
     }
 }
