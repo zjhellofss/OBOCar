@@ -24,16 +24,19 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.wanli.fss.obocar.Service.GetDestinationService;
 import com.wanli.fss.obocar.Service.GetOrderService;
 import com.wanli.fss.obocar.Service.GetStateService;
 import com.wanli.fss.obocar.Service.ServiceUtils.GetOrderHttpUtils;
+import com.wanli.fss.obocar.Service.TravelService;
 import com.wanli.fss.obocar.Service.UpdateAddressService;
+import com.wanli.fss.obocar.Session.SessionLoger;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class DriverActivity extends AppCompatActivity {
-    Timer timer = new Timer();
+    private Timer timer = new Timer();
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -43,9 +46,13 @@ public class DriverActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     String res = GetStateService.getStateService();
                     Log.e("Amap", "res: " + res);
-                    if (res.equals("CATCHING")) {
+                    if (res.startsWith("CATCHING")) {
                         Toast.makeText(getApplicationContext(), "已经为您接到新的订单前往接驾",
                                 Toast.LENGTH_LONG).show();
+                        //记录乘客的Id
+                        String pid = res.substring(9, res.length());
+                        SessionLoger.setPeerId(pid);
+                        Log.e("Amap", "用户的SessionId为 " + pid);
                         startOrder.setText("已接到乘客上车");
                         timer.cancel();
                         task.cancel();
@@ -99,13 +106,20 @@ public class DriverActivity extends AppCompatActivity {
                     startOrder.setText("接单中...");
                     GetOrderService.GetOrder();
                     timer.schedule(task, 0, 1000);
-//                    task.cancel();
-//                    timer.cancel();
-//                    //并且修改司机对应的状态
-//                    //开始查询自己的状态 如果状态为catching则按钮改变为正在接乘客
-//                    DriverStateService.waitForState();
-//                    Toast.makeText(getApplicationContext(), "已接单，前往接驾", Toast.LENGTH_LONG).show();
-//                    startOrder.setText("前往接驾");
+                } else if (buttonText.equals("已接到乘客上车")) {
+                    //修改按钮的文本
+                    startOrder.setText("乘客已经到达目的地");
+                    //将之前记录的用户的SessionId对应的乘客状态置为traveling
+                    //将自身的状态记做driving
+
+                    TravelService.setTravel();
+                } else if (buttonText.equals("乘客已经到达目的地")) {
+                    //在此处将司机和乘客的状态重新设置为idle
+                    GetDestinationService.setStatus();
+                    //重新开始接单
+                    startOrder.setText("开始接单");
+                } else {
+
                 }
 
 

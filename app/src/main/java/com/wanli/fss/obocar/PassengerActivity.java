@@ -1,6 +1,9 @@
 package com.wanli.fss.obocar;
 
+import android.annotation.SuppressLint;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -41,12 +44,15 @@ import com.amap.api.services.route.WalkRouteResult;
 import com.wanli.fss.obocar.Service.DestroyUserService;
 import com.wanli.fss.obocar.Service.GetDriverLocationService;
 import com.wanli.fss.obocar.Service.GetOrderService;
+import com.wanli.fss.obocar.Service.GetStateService;
 import com.wanli.fss.obocar.Service.TakeCarService;
 import com.wanli.fss.obocar.Service.UpdateAddressService;
 import com.wanli.fss.obocar.Session.SessionLoger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PassengerActivity extends AppCompatActivity {
 
@@ -66,6 +72,7 @@ public class PassengerActivity extends AppCompatActivity {
     private LatLonPoint endPoint;
     private DrivingRouteOverlay drivingRouteOverlay = null;
     private LatLonPoint driverPoint;
+
 
     protected void initUI() {
         _mapView = (MapView) findViewById(R.id.PassengerMap);
@@ -286,11 +293,80 @@ public class PassengerActivity extends AppCompatActivity {
                         driverPoint = GetDriverLocationService.getDriverLocation();
                         //绘制当前乘客与司机之间的路径
                         drawRouteLine(startPoint, driverPoint);
+                        //mytag
+                        //查询自身的状态是否为traveling (在司机端的操作会使此处改变状态)
+                        timer.schedule(task, 0, 1000);
                     }
                 }
             }
         });
     }
+
+    //此处应该设置一个独立的函数负责接收到达目的地的消息
+
+
+    private Timer timer = new Timer();
+
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1: {
+                    //在此处查询乘客的状态是否为traveling
+
+                    String res = GetStateService.getStateService();
+                    Log.e("Amap", "res: " + res);
+                    if (res.startsWith("TRAVELING")) {
+                        _bt_startOrder.setText("正在前往目的地");
+                        Toast.makeText(getApplicationContext(), "正在旅途中...", Toast.LENGTH_LONG).show();
+                        //此处应该重新绘制前往目的地路线图
+                        drawRouteLine(startPoint, endPoint);
+                        task.cancel();
+                        //在此处监听用户是否到达了目的地
+                        //判断状态是否为idle
+                        timer.schedule(idleTask, 0, 500);
+
+                    }
+                }
+                case 2: {
+                    String res = GetStateService.getStateService();
+                    Log.e("Amap", "res: " + res);
+                    if (res.startsWith("IDLE")) {
+                        Log.e("Amap", "res: " + "已经到达目的地");
+                        Toast.makeText(getApplicationContext(), "已经到达目的地", Toast.LENGTH_LONG).show();
+                        _bt_startOrder.setText("开始约车");
+                        timer.cancel();
+                        idleTask.cancel();//取消Passenger的旅行状态
+                        _amap.clear();
+                        moveMap(startPoint.getLatitude(), startPoint.getLongitude());
+                        addMarkerToMap(startPoint.getLatitude(), startPoint.getLongitude(), R.drawable.location_marker);
+                    }
+
+                }
+                break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
+    private TimerTask task = new TimerTask() {
+        public void run() {
+            Message message = new Message();
+            message.what = 1;
+            handler.sendMessage(message);
+        }
+    };
+
+    private TimerTask idleTask = new TimerTask() {
+        @Override
+        public void run() {
+            Message message = new Message();
+            //用于向用户传递
+            message.what = 2;
+            handler.sendMessage(message);
+        }
+    };
 
 
     protected void initAutoCompleteTextView() {
