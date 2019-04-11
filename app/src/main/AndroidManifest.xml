@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.wanli.fss.obocar">
 
-
     <!-- 用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 用于访问GPS定位 -->
@@ -25,14 +24,9 @@
     <!-- 用于申请获取蓝牙信息进行室内定位 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
-
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
-
 
     <application
         android:allowBackup="true"
@@ -51,8 +45,8 @@
 
         </activity>
         <activity android:name=".RegActivity" />
-        <activity android:name=".DriverActivity"></activity>
-        <activity android:name=".PassengerActivity"></activity>
+        <activity android:name=".DriverActivity" />
+        <activity android:name=".PassengerActivity" />
         <activity android:name=".PhotoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,15 +56,16 @@
         </activity>
 
         <provider
-            android:authorities="com.wanli.fss.obocar.fileprovider"
             android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.wanli.fss.obocar.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".FemaleActivity"></activity>
     </application>
 
 </manifest>

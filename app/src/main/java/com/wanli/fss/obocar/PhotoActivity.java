@@ -47,8 +47,16 @@ public class PhotoActivity extends AppCompatActivity {
             Log.e("bitMap", pictureBase64);
             boolean res = FaceScanService.faceScanForGender(pictureBase64);
             Toast.makeText(getApplicationContext(), (res ? "男性" : "女性"), Toast.LENGTH_LONG).show();
-        } else {
-
+            //为了测试所用 此处性别倒置
+            //跳转到对应的界面
+            Intent intent = new Intent();
+            if (!res) {
+                intent.setClass(PhotoActivity.this, LoginActivity.class);
+            } else {
+                intent.setClass(PhotoActivity.this, FemaleActivity.class);
+            }
+            //跳转到相应的位置
+            startActivity(intent);
         }
     }
 }
