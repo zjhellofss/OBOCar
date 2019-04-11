@@ -48,7 +48,7 @@ public class DriverActivity extends AppCompatActivity {
                     Log.e("Amap", "res: " + res);
                     if (res.startsWith("CATCHING")) {
                         Toast.makeText(getApplicationContext(), "已经为您接到新的订单前往接驾",
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_SHORT).show();
                         //记录乘客的Id
                         String pid = res.substring(9, res.length());
                         SessionLoger.setPeerId(pid);

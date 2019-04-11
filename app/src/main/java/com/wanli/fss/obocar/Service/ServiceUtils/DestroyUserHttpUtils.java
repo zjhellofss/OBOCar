@@ -14,44 +14,6 @@ import okhttp3.Response;
 
 public class DestroyUserHttpUtils {
     public static void destroyUserFromServer(String sessionId) throws InterruptedException {
-
-        final FormBody formBody = new FormBody
-                .Builder()
-                .add("sid", sessionId)
-                .build();
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-
-                OkHttpClient client = new OkHttpClient();
-                //构建FormBody，传入要提交的参数
-
-                final Request request = new Request.Builder()
-                        .url("http://192.168.43.109:8080/mywb/remove")
-                        .post(formBody)
-                        .build();
-                Call requestCal = client.newCall(request);
-                Response response = null;
-                try {
-                    response = requestCal.execute();
-                } catch (IOException e) {
-                    throw new RuntimeException(e.toString());
-                }
-                try {
-                    String res = response.body().string();
-                    if (res.startsWith("success")) {
-                        String sessionId = res.substring(8, res.length());
-                        //记录用户当前的sessionId
-                        SessionLoger.setSessionId(sessionId);
-                    }
-                    Log.e("DestroyHttpUtils", res);
-                } catch (IOException e) {
-                    throw new RuntimeException(e.toString());
-                }
-            }
-        });
-        t.start();
-        t.join(5000);
+        OBOHttpUtils.singleParamsHttp(sessionId, "remove");
     }
 }

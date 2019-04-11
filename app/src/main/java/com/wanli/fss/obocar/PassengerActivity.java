@@ -197,7 +197,7 @@ public class PassengerActivity extends AppCompatActivity {
                 //画驾驶的路线图
                 if (i != 1000) {
                     Log.e("Amap", "驾驶路径绘制失败");
-                    Toast.makeText(getApplicationContext(), "服务器正忙", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "服务器正忙", Toast.LENGTH_SHORT).show();
                 } else {
                     //得到路径
                     //todo 以第一种方案为准
@@ -245,7 +245,7 @@ public class PassengerActivity extends AppCompatActivity {
                         public void onPoiSearched(PoiResult poiResult, int i) {
                             //得到POI兴趣点集合,使用i判断查询是否成功
                             if (i != 1000) {
-                                Toast.makeText(getApplicationContext(), "服务器正忙", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "服务器正忙", Toast.LENGTH_SHORT).show();
                                 Log.e("Amap", "POI搜索失败");
                             } else {
                                 List<PoiItem> poiItemList = poiResult.getPois();
@@ -279,13 +279,13 @@ public class PassengerActivity extends AppCompatActivity {
                     _bt_startOrder.setText("约车中...");
                     String driverSid = TakeCarService.getDriverSid();
                     if (driverSid.equals("FAILED")) {
-                        Toast.makeText(getApplicationContext(), "服务器正忙或附近没有司机，请稍后再试", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "服务器正忙或附近没有司机，请稍后再试", Toast.LENGTH_SHORT).show();
                         //todo 应该设置回退的环节，但是我时间来不及了
                     } else {
                         Log.e("Amap", "司机的sessionId为 " + driverSid);
                         SessionLoger.setPeerId(driverSid);
                         //todo 必须完成的功能,绘制司机的位置和路径图
-                        Toast.makeText(getApplicationContext(), "司机正在赶来，请在原地等待", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "司机正在赶来，请在原地等待", Toast.LENGTH_SHORT).show();
                         _bt_startOrder.setText("等待接驾...");
                         _amap.clear();//清除地图的覆盖物
                         drivingRouteOverlay.removeFromMap();//清除路线规划图
@@ -319,7 +319,7 @@ public class PassengerActivity extends AppCompatActivity {
                     Log.e("Amap", "res: " + res);
                     if (res.startsWith("TRAVELING")) {
                         _bt_startOrder.setText("正在前往目的地");
-                        Toast.makeText(getApplicationContext(), "正在旅途中...", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "正在旅途中...", Toast.LENGTH_SHORT).show();
                         //此处应该重新绘制前往目的地路线图
                         drawRouteLine(startPoint, endPoint);
                         task.cancel();
@@ -334,7 +334,7 @@ public class PassengerActivity extends AppCompatActivity {
                     Log.e("Amap", "res: " + res);
                     if (res.startsWith("IDLE")) {
                         Log.e("Amap", "res: " + "已经到达目的地");
-                        Toast.makeText(getApplicationContext(), "已经到达目的地", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "已经到达目的地", Toast.LENGTH_SHORT).show();
                         _bt_startOrder.setText("开始约车");
                         timer.cancel();
                         idleTask.cancel();//取消Passenger的旅行状态

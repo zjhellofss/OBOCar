@@ -15,8 +15,6 @@ import okhttp3.Response;
 
 public class LoginHttpUtils {
     private static boolean checkResult;
-    private static String responseStr;
-
     public static boolean CheckUserFromServer(String userName, String userPswd, String isDriver) throws IOException, InterruptedException {
         checkResult = false;
         final FormBody formBody = new FormBody
