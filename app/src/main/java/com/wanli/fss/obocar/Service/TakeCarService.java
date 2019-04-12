@@ -6,6 +6,8 @@ import com.wanli.fss.obocar.Service.ServiceUtils.TakeCarHttpUtils;
 import com.wanli.fss.obocar.Session.SessionLoger;
 
 public class TakeCarService {
+    private static final String Tag = TakeCarService.class.getSimpleName();
+
     /**
      * return 是否有合适的司机
      * 如果有合适的司机返回SessionId，
@@ -16,7 +18,7 @@ public class TakeCarService {
         try {
             res = TakeCarHttpUtils.getDriverFromServer(SessionLoger.getSessionId());
         } catch (InterruptedException e) {
-            Log.e("TakeCarService","线程异常中断");
+            Log.e(Tag, "访问网络的子线程异常中断");
         }
         return res;
     }

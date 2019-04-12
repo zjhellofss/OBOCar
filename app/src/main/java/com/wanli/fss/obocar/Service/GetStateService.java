@@ -10,14 +10,15 @@ import com.wanli.fss.obocar.Session.SessionLoger;
  * 获取自身状态的一个通用函数
  */
 public class GetStateService {
+    private static final String Tag = GetStateService.class.getSimpleName();
+
     public static String getStateService() {
         String sid = SessionLoger.getSessionId();
         try {
             return GetStateServiceHttpUtils.getStateServiceFromServer(sid);
         } catch (InterruptedException e) {
-            Log.e("GetStateService", "线程异常中断");
+            Log.e(Tag, "线程异常中断");
         }
         return "";
     }
-
 }

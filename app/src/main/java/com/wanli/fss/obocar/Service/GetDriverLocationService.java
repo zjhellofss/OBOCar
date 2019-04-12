@@ -7,6 +7,8 @@ import com.wanli.fss.obocar.Service.ServiceUtils.GetDriverLocationHttpUtils;
 import com.wanli.fss.obocar.Session.SessionLoger;
 
 public class GetDriverLocationService {
+    private static String Tag = GetDriverLocationService.class.getSimpleName();
+
     public static LatLonPoint getDriverLocation() {
         String driverId = SessionLoger.getPeerId();
         String location = null;
@@ -21,8 +23,9 @@ public class GetDriverLocationService {
             double longitude = Double.parseDouble(laotitude[1]);
             return new LatLonPoint(latitude, longitude);
         } else {
-            throw new RuntimeException("");
+            Log.e(Tag, "网络访问线程异常中断");
         }
-
+        //默认放回的定位点
+        return new LatLonPoint(120.0, 30.0);
     }
 }
