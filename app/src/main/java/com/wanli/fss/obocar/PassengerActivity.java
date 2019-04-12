@@ -1,11 +1,12 @@
 package com.wanli.fss.obocar;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -459,19 +460,31 @@ public class PassengerActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        _mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         //todo 摧毁服务器中User对象
+        _mapView.onDestroy();
         Log.e("Amap", "摧毁地图对象");
-        //DestroyUserService.destoryUser(SessionLoger.getSessionId());
+        DestroyUserService.destoryUser(SessionLoger.getSessionId());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        _mapView.onPause();
         Log.e("Amap", "暂停地图显示");
-        //为了方便开发故不从服务器中移除对应的对象
-        // DestroyUserService.destoryUser(SessionLoger.getSessionId());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        _mapView.onResume();
     }
 }
 

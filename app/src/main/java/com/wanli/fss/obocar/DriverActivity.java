@@ -27,7 +27,6 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.wanli.fss.obocar.Service.GetDestinationService;
 import com.wanli.fss.obocar.Service.GetOrderService;
 import com.wanli.fss.obocar.Service.GetStateService;
-import com.wanli.fss.obocar.Service.ServiceUtils.GetOrderHttpUtils;
 import com.wanli.fss.obocar.Service.TravelService;
 import com.wanli.fss.obocar.Service.UpdateAddressService;
 import com.wanli.fss.obocar.Session.SessionLoger;
@@ -262,7 +261,6 @@ public class DriverActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         _mapView.onSaveInstanceState(outState);
     }
 }
