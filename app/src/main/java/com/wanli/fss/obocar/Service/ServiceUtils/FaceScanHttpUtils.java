@@ -11,57 +11,57 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-//{"status":200,"age":"84","gender":"female","emotion":"other"}
-class UserForJson {
-    private String status;
-    private int age;
-    private String gender;
-    private String emotion;
-
-    public UserForJson(String status, int age, String gender, String emotion) {
-        this.status = status;
-        this.age = age;
-        this.gender = gender;
-        this.emotion = emotion;
-    }
-
-    public UserForJson() {
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getEmotion() {
-        return emotion;
-    }
-
-    public void setEmotion(String emotion) {
-        this.emotion = emotion;
-    }
-}
 
 public class FaceScanHttpUtils {
+    //{"status":200,"age":"84","gender":"female","emotion":"other"}
+    class UserForJson {
+        private String status;
+        private int age;
+        private String gender;
+        private String emotion;
+
+        public UserForJson(String status, int age, String gender, String emotion) {
+            this.status = status;
+            this.age = age;
+            this.gender = gender;
+            this.emotion = emotion;
+        }
+
+        public UserForJson() {
+        }
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public int getAge() {
+            return age;
+        }
+
+        public void setAge(int age) {
+            this.age = age;
+        }
+
+        public String getGender() {
+            return gender;
+        }
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
+
+        public String getEmotion() {
+            return emotion;
+        }
+
+        public void setEmotion(String emotion) {
+            this.emotion = emotion;
+        }
+    }
+
     //验证产生的性别
     private static String gender = "";
     private static String appcode = "aa416896d3f843cead6ed877223e0664";
